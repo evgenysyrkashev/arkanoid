@@ -4,8 +4,8 @@
   var canvasH, canvasW,
       getRandomLayout, bricksLayer, showMessage,
 
-      Ball, CollisionManager, Desk, Brick, BricksLayout, Grid,
-      arkBall, arkCollisionManager, arkDesk, arkBricksLayout, arkGrid,
+      Ball, CollisionManager, Paddle, Brick, BricksLayout, Grid,
+      arkBall, arkCollisionManager, arkPaddle, arkBricksLayout, arkGrid,
       processor, clearCanvas, animate, init,
 
       saveGameState, restoreSavedGame,
@@ -42,16 +42,16 @@
   if("ondeviceorientation" in window) {
     window.addEventListener("deviceorientation", function(e) {
       if(e.gamma !== null) {
-        arkDesk.x = canvasW / 2 + Math.round(e.gamma) * canvasW / 2 / 30;
-        arkCollisionManager.update(arkDesk);
+        arkPaddle.x = canvasW / 2 + Math.round(e.gamma) * canvasW / 2 / 30;
+        arkCollisionManager.update(arkPaddle);
       }
     });
   }
 
   canvas.addEventListener('mousemove', function(event) {
     if(!pause && !gameover) {
-      arkDesk.x = event.offsetX - arkDesk.width / 2;
-      arkCollisionManager.update(arkDesk);
+      arkPaddle.x = event.offsetX - arkPaddle.width / 2;
+      arkCollisionManager.update(arkPaddle);
     }
   }, false);
 
@@ -124,9 +124,9 @@
     gameState.arkBall.vx = arkBall.vx;
     gameState.arkBall.vy = arkBall.vy;
     
-    gameState.arkDesk = {};
-    gameState.arkDesk.x = arkDesk.x;
-    gameState.arkDesk.y = arkDesk.y;
+    gameState.arkPaddle = {};
+    gameState.arkPaddle.x = arkPaddle.x;
+    gameState.arkPaddle.y = arkPaddle.y;
 
     gameState.bricksLayer = bricksLayer;
 
@@ -148,8 +148,8 @@
     arkBall.vx = savedGameState.arkBall.vx;
     arkBall.vy = savedGameState.arkBall.vy;
     
-    arkDesk.x = savedGameState.arkDesk.x;
-    arkDesk.y = savedGameState.arkDesk.y;
+    arkPaddle.x = savedGameState.arkPaddle.x;
+    arkPaddle.y = savedGameState.arkPaddle.y;
 
     bricksLayer = savedGameState.bricksLayer;
     arkBricksLayout = new BricksLayout();
@@ -191,8 +191,8 @@
     arkCollisionManager.add(this);
   };
 
-  // Desk class
-  Desk = function(x, y) {
+  // Paddle class
+  Paddle = function(x, y) {
     this.x = x;
     this.y = y;
     this.width = 60;
@@ -203,7 +203,7 @@
       ctx.fillRect(this.x, this.y, this.width, this.height);
     };
 
-    // Add desk object to collisionManager
+    // Add paddle object to collisionManager
     arkCollisionManager.add(this);
   };
 
@@ -381,7 +381,7 @@
   // Iterate through all objects in processList
   processor = function() {
     var i,
-        processList = [arkBall, arkDesk, arkBricksLayout],
+        processList = [arkBall, arkPaddle, arkBricksLayout],
         len = processList.length;
 
     if(!pause) {
@@ -460,7 +460,7 @@
     arkCollisionManager.add({'x': canvasW, 'y': 0, 'width': 0, 'height': canvasH});
     
     arkBall = new Ball(canvasW - 50 , canvasH - 20, 5, -5);
-    arkDesk = new Desk(canvasW / 2 - 30, canvasH - 20);
+    arkPaddle = new Paddle(canvasW / 2 - 30, canvasH - 20);
 
     // Generate new layout if we don't have any saved data
     if(!gameInProgress && !localStorage["arkanoidGameState"]) {
