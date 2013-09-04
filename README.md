@@ -9,7 +9,7 @@ Known issues
 * Collision detection doesn't work when the ball hit a corner of a brick.
 * If you have saved game state and then have changed canvas size, game reloads with old coordinates.
 
-Alt-H2 TODO list
+TODO list
 ---
 * Split main.js to modules and load them with Require.js
 * Add the score system
