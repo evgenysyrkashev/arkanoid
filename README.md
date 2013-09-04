@@ -1,4 +1,4 @@
-Arkanoid game.
+Arkanoid game
 ===
 Early beta version
 
